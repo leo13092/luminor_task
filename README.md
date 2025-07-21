@@ -1,5 +1,30 @@
 # Luminor EKS + Atlantis Infrastructure
 
+## Preliminary
+
+Before you start, make sure you have:
+
+1. **An AWS account** — Register at https://aws.amazon.com/ if you don't have one.
+2. **An IAM user** — Create a user in the AWS Console with programmatic access and attach the necessary policies (e.g., AdministratorAccess for initial setup).
+3. **Two IAM roles** —
+   - **Admin role** (for cluster administrators)
+   - **Read-only role** (for users with view-only access)
+   
+   Both roles should have trust relationships allowing them to be assumed by your users or groups as needed. Attach appropriate EKS policies (e.g., `AmazonEKSClusterAdminPolicy` for admin, `AmazonEKSClusterViewPolicy` for read-only, or custom policies if required).
+
+4. **A GitHub Personal Access Token** — For Atlantis integration.
+
+### Example `terraform.tfvars`
+```hcl
+aws_region              = "eu-central-1"
+github_repo             = "your/repo"
+github_user             = "your-github-user"
+github_token            = "your-github-token"
+eks_admin_arn           = "arn:aws:iam::123456789012:role/eks-admin-role"
+eks_readonly_arn        = "arn:aws:iam::123456789012:role/eks-readonly-role"
+eks_terraform_user_arn  = "arn:aws:iam::123456789012:user/terraform-user"
+```
+
 ## Description
 
 This project deploys AWS EKS infrastructure and installs Atlantis to automate Terraform workflows via GitHub Pull Requests.
