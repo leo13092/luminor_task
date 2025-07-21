@@ -31,54 +31,54 @@ Before you start, make sure you have:
 
 and
 
-```
-{
-	"Version": "2012-10-17",
-	"Statement": [
-		{
-			"Sid": "FullEKSAccess",
-			"Effect": "Allow",
-			"Action": [
-				"eks:*"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "IAMAccessForEKS",
-			"Effect": "Allow",
-			"Action": [
-				"iam:GetRole",
-				"iam:PassRole",
-				"iam:ListRoles"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "SSMAndEC2Describe",
-			"Effect": "Allow",
-			"Action": [
-				"ec2:DescribeSubnets",
-				"ec2:DescribeVpcs",
-				"ec2:DescribeSecurityGroups",
-				"ec2:DescribeRouteTables",
-				"ec2:DescribeInternetGateways",
-				"ssm:GetParameter",
-				"ssm:GetParameters",
-				"ssm:GetParameterHistory"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "STSAssumeRoles",
-			"Effect": "Allow",
-			"Action": [
-				"sts:AssumeRole"
-			],
-			"Resource": "*"
-		}
-	]
-}
-```
+  ```
+	{
+		"Version": "2012-10-17",
+		"Statement": [
+			{
+				"Sid": "FullEKSAccess",
+				"Effect": "Allow",
+				"Action": [
+					"eks:*"
+				],
+				"Resource": "*"
+			},
+			{
+				"Sid": "IAMAccessForEKS",
+				"Effect": "Allow",
+				"Action": [
+					"iam:GetRole",
+					"iam:PassRole",
+					"iam:ListRoles"
+				],
+				"Resource": "*"
+			},
+			{
+				"Sid": "SSMAndEC2Describe",
+				"Effect": "Allow",
+				"Action": [
+					"ec2:DescribeSubnets",
+					"ec2:DescribeVpcs",
+					"ec2:DescribeSecurityGroups",
+					"ec2:DescribeRouteTables",
+					"ec2:DescribeInternetGateways",
+					"ssm:GetParameter",
+					"ssm:GetParameters",
+					"ssm:GetParameterHistory"
+				],
+				"Resource": "*"
+			},
+			{
+				"Sid": "STSAssumeRoles",
+				"Effect": "Allow",
+				"Action": [
+					"sts:AssumeRole"
+				],
+				"Resource": "*"
+			}
+		]
+	}
+  ```
 
 5. **A GitHub Personal Access Token** — For Atlantis integration.
 
