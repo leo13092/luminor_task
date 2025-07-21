@@ -11,7 +11,7 @@ Before you start, make sure you have:
    - **Read-only role** (for users with view-only access)
    
    Both roles should have trust relationships allowing them to be assumed by your users or groups as needed. Attach appropriate EKS policies (e.g., `AmazonEKSClusterAdminPolicy` for admin, `AmazonEKSClusterViewPolicy` for read-only, or custom policies if required).
-4. Create custom policies in AWS and attach them to terrafrom-user:
+4. ***Create custom policies*** in AWS and attach them to terrafrom-user:
    ```
    {
 	"Version": "2012-10-17",
@@ -80,7 +80,7 @@ and
 }
 ```
 
-6. **A GitHub Personal Access Token** — For Atlantis integration.
+5. **A GitHub Personal Access Token** — For Atlantis integration.
 
 ### Example `terraform.tfvars`
 ```hcl
