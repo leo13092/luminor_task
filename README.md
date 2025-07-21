@@ -11,8 +11,76 @@ Before you start, make sure you have:
    - **Read-only role** (for users with view-only access)
    
    Both roles should have trust relationships allowing them to be assumed by your users or groups as needed. Attach appropriate EKS policies (e.g., `AmazonEKSClusterAdminPolicy` for admin, `AmazonEKSClusterViewPolicy` for read-only, or custom policies if required).
+4. Create custom policies in AWS and attach them to terrafrom-user:
+   ```
+   {
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "AllowPassRoleForEKSAccess",
+			"Effect": "Allow",
+			"Action": "iam:PassRole",
+			"Resource": [
+				"arn:aws:iam::020510964969:role/eks-admin-role",
+				"arn:aws:iam::020510964969:role/eks-readonly-role"
+			]
+		}
+	]
+   }
+   ```
 
-4. **A GitHub Personal Access Token** — For Atlantis integration.
+and
+
+```
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "FullEKSAccess",
+			"Effect": "Allow",
+			"Action": [
+				"eks:*"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "IAMAccessForEKS",
+			"Effect": "Allow",
+			"Action": [
+				"iam:GetRole",
+				"iam:PassRole",
+				"iam:ListRoles"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "SSMAndEC2Describe",
+			"Effect": "Allow",
+			"Action": [
+				"ec2:DescribeSubnets",
+				"ec2:DescribeVpcs",
+				"ec2:DescribeSecurityGroups",
+				"ec2:DescribeRouteTables",
+				"ec2:DescribeInternetGateways",
+				"ssm:GetParameter",
+				"ssm:GetParameters",
+				"ssm:GetParameterHistory"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "STSAssumeRoles",
+			"Effect": "Allow",
+			"Action": [
+				"sts:AssumeRole"
+			],
+			"Resource": "*"
+		}
+	]
+}
+```
+
+6. **A GitHub Personal Access Token** — For Atlantis integration.
 
 ### Example `terraform.tfvars`
 ```hcl
