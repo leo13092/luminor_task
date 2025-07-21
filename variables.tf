@@ -28,3 +28,8 @@ variable "eks_readonly_arn" {
   description = "ARN of the IAM role for EKS read-only access"
   type        = string
 }
+
+variable "eks_terraform_user_arn" {
+  description = "ARN of the IAM user for Terraform access to EKS"
+  type        = string
+}

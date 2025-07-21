@@ -5,20 +5,18 @@ resource "helm_release" "atlantis" {
   namespace  = "atlantis"
   create_namespace = true
 
-  set {
+set = [
+  {
     name  = "github.user"
     value = var.github_user
-  }
-  set {
+  },
+  {
     name  = "github.token"
     value = var.github_token
+  },
+  {
+    name  = "github.secret"
+    value = "supersecret"
   }
-  set {
-    name  = "github.repo"
-    value = var.github_repo
-  }
-  set {
-    name  = "orgWhitelist"
-    value = "github.com/${var.github_user}"
-  }
+]
 }

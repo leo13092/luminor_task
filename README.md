@@ -5,16 +5,19 @@
 This project deploys AWS EKS infrastructure and installs Atlantis to automate Terraform workflows via GitHub Pull Requests.
 
 ## Components
-- VPC with two subnets
-- EKS cluster with autoscaling worker nodes
-- RBAC with admin and read-only roles
-- Atlantis installed via Helm
+- VPC with two public subnets and an Internet Gateway
+- EKS cluster with autoscaling managed node group
+- RBAC with admin and read-only roles (via Kubernetes RBAC)
+- Atlantis is installed via Helm
+- IAM user and role access to EKS is managed via the `eks-access` module (AWS EKS Access Entry/Policy Association)
+- The `aws-auth` ConfigMap is managed via Terraform
 
 ## Quick Start
 
 1. Clone the repository and navigate to the project directory
 2. Fill in variables in `terraform.tfvars` or via environment variables
-3. Run:
+3. Make sure your AWS credentials are set and your IAM user is specified in the config
+4. Run:
 
 ```sh
 make init
@@ -23,11 +26,20 @@ make apply
 
 ## Variables
 - `aws_region` — AWS region
-- `github_repo` — GitHub repository
-- `github_user` — GitHub username
-- `github_token` — GitHub Personal Access Token
+- `github_repo` — GitHub repository (not used in Helm values)
+- `github_user` — GitHub username for Atlantis
+- `github_token` — GitHub Personal Access Token (used as `github.secret` for Atlantis)
 - `eks_admin_arn` — ARN of the IAM role for admins
 - `eks_readonly_arn` — ARN of the IAM role for read-only
+- `eks_terraform_user_arn` — ARN of the IAM user for Terraform
+
+## Important
+- Access to the EKS cluster is managed via the `eks-access` module (`aws_eks_access_entry` and `aws_eks_access_policy_association` resources).
+- For correct access management, use only those policyArn values that actually exist in your region (check with `aws eks list-access-policies`).
+- The `aws-auth` ConfigMap is managed via Terraform. If you get an "already exists" error, delete it manually or import it into Terraform.
+- For Atlantis, the GitHub token parameter is passed as `github.secret` (not `github.token` or `repo`).
+- The `kubernetes` and `helm` providers use your local kubeconfig (`~/.kube/config`). Make sure your user has `system:masters` rights to manage the cluster.
+- If you get permission errors for the terraform-user, check that it is listed in aws-auth with the `system:masters` group.
 
 ## Atlantis Check
 Create a Pull Request with any change to a Terraform file — Atlantis will automatically react.
